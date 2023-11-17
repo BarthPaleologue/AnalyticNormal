@@ -10,8 +10,9 @@ body {
   user-select: none;
   background: black;
 
-  #renderer {
+  canvas {
     z-index: 1;
     float: left;
+    touch-action: none;
   }
 }

@@ -2,6 +2,7 @@ import { Scene } from "@babylonjs/core/scene";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { Quaternion, Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData";
+import {showNormals} from "../debug";
 
 export enum Direction {
     FRONT,
@@ -35,7 +36,7 @@ export class PlanetChunk {
     constructor(direction: Direction, planetRadius: number, useAnalyticNormal: boolean, scene: Scene) {
         this.mesh = new Mesh("chunk", scene);
 
-        const nbVerticesPerRow = 64;
+        const nbVerticesPerRow = 16;
 
         const positions = new Float32Array(nbVerticesPerRow * nbVerticesPerRow * 3);
         const normals = new Float32Array(nbVerticesPerRow * nbVerticesPerRow * 3);
@@ -102,16 +103,20 @@ export class PlanetChunk {
 
         vertexData.applyToMesh(this.mesh);
         if(!useAnalyticNormal) this.mesh.createNormals(false);
+
+        showNormals(this.mesh, scene);
     }
 }
 
 function terrainFunction(position: Vector3): [height: number, grad: Vector3] {
     const heightMultiplier = 0.5;
     const frequency = 3;
-    const height = Math.cos(position.x * frequency) * Math.sin(position.y * frequency) * Math.cos(position.z * frequency) * heightMultiplier;
-    const gradX = -Math.sin(position.x * frequency) * Math.sin(position.y * frequency) * Math.cos(position.z * frequency) * frequency * heightMultiplier;
-    const gradY = Math.cos(position.x * frequency) * Math.cos(position.y * frequency) * Math.cos(position.z * frequency) * frequency * heightMultiplier;
-    const gradZ = Math.cos(position.x * frequency) * Math.sin(position.y * frequency) * Math.sin(position.z * frequency) * frequency * heightMultiplier;
+
+    const height = Math.sin(position.y * frequency) * heightMultiplier;
+
+    const gradX = 0;
+    const gradY = Math.cos(position.y * frequency) * frequency * heightMultiplier;
+    const gradZ = 0;
 
     return [height, new Vector3(gradX, gradY, gradZ)];
 }
