@@ -22,7 +22,7 @@ const scene = new Scene(engine);
 
 const light = new DirectionalLight("light", new Vector3(0, 5, 10).negateInPlace().normalize(), scene);
 
-const PLANET_RADIUS = 4;
+const PLANET_RADIUS = 10; //1000e3;
 
 const planetAnalytic = new Planet(PLANET_RADIUS, true, scene);
 planetAnalytic.node.position.x = 10;

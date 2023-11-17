@@ -67,7 +67,7 @@ export class PlanetChunk {
 
                 vertexPosition.copyFrom(vertexNormalToPlanet.scale(planetRadius));
 
-                const [height, gradient] = terrainFunction(vertexNormalToPlanet);
+                const [height, gradient] = terrainFunction(vertexNormalToPlanet, planetRadius);
 
                 gradient.scaleInPlace(1 / planetRadius);
 
@@ -110,8 +110,8 @@ export class PlanetChunk {
     }
 }
 
-function terrainFunction(position: Vector3): [height: number, grad: Vector3] {
-    const heightMultiplier = 0.5;
+function terrainFunction(position: Vector3, planetRadius: number): [height: number, grad: Vector3] {
+    const heightMultiplier = 0.2 * planetRadius;
     const frequency = 8; // 2
 
     const height = Math.sin(position.y * frequency) * heightMultiplier;
