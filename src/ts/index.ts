@@ -11,6 +11,9 @@ import {DirectionalLight} from "@babylonjs/core/Lights/directionalLight";
 import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
 import {Viewport} from "@babylonjs/core/Maths/math.viewport";
 
+import "@babylonjs/core/Misc/screenshotTools";
+import { Tools } from "@babylonjs/core/Misc/tools";
+
 const canvas = document.getElementById("renderer") as HTMLCanvasElement;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -101,4 +104,12 @@ window.addEventListener("resize", () => {
     engine.resize();
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+});
+
+document.addEventListener("keypress", (e) => {
+    if (e.key === "p") {
+        // take screenshot
+        Tools.CreateScreenshot(engine, camera1, { precision: 1 });
+        Tools.CreateScreenshot(engine, camera2, { precision: 1 });
+    }
 });
