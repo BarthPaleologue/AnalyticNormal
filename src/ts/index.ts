@@ -1,46 +1,39 @@
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
-import { FreeCamera } from "@babylonjs/core/Cameras/freeCamera";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
-import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
-import { Effect } from "@babylonjs/core/Materials/effect";
-import { PostProcess } from "@babylonjs/core/PostProcesses/postProcess";
-import { Texture } from "@babylonjs/core/Materials/Textures/texture";
-import { PointLight } from "@babylonjs/core/Lights/pointLight";
 import "@babylonjs/core/Materials/standardMaterial";
 import "@babylonjs/core/Loading/loadingScreen";
 
 import "../styles/index.scss";
 
-import postprocessCode from "../shaders/smallPostProcess.glsl";
+import {Planet} from "./planet/createPlanet";
+import {ArcRotateCamera, DirectionalLight} from "@babylonjs/core";
 
 const canvas = document.getElementById("renderer") as HTMLCanvasElement;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const engine = new Engine(canvas);
+engine.displayLoadingUI();
 
 const scene = new Scene(engine);
 
-const camera = new FreeCamera("camera", Vector3.Zero(), scene);
+const camera = new ArcRotateCamera("camera", 3.14/2, 3.14/2, 15, Vector3.Zero(), scene);
 camera.attachControl();
 
-const light = new PointLight("light", new Vector3(-5, 5, 10), scene);
+const light = new DirectionalLight("light", new Vector3(0, 5, 10).negateInPlace().normalize(), scene);
 
-const sphere = MeshBuilder.CreateSphere("sphere", { segments: 32, diameter: 1 }, scene);
-sphere.position = new Vector3(0, 0, 10);
+const planetAnalytic = new Planet(4, true, scene);
+planetAnalytic.node.position.x = 5;
 
-Effect.ShadersStore[`PostProcess1FragmentShader`] = postprocessCode;
-const postProcess = new PostProcess("postProcess1", "PostProcess1", [], ["textureSampler"], 1, camera, Texture.BILINEAR_SAMPLINGMODE, engine);
+const planetImplicit = new Planet(4, false, scene);
+planetImplicit.node.position.x = -5;
 
 let clock = 0;
 
 function updateScene() {
     const deltaTime = engine.getDeltaTime() / 1000;
     clock += deltaTime;
-
-    sphere.position.x = Math.cos(clock);
-    sphere.position.z = 5 + Math.sin(clock);
 }
 
 scene.executeWhenReady(() => {
