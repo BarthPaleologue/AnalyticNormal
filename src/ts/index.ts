@@ -20,33 +20,33 @@ engine.displayLoadingUI();
 
 const scene = new Scene(engine);
 
-const light1 = new DirectionalLight("light", new Vector3(0, 5, 10).negateInPlace().normalize(), scene);
+const light = new DirectionalLight("light", new Vector3(0, 5, 10).negateInPlace().normalize(), scene);
 
-const planetAnalytic = new Planet(4, true, scene);
+const PLANET_RADIUS = 10;
+
+const planetAnalytic = new Planet(PLANET_RADIUS, true, scene);
 planetAnalytic.node.position.x = 10;
 planetAnalytic.node.getChildMeshes().forEach(mesh => {
     mesh.layerMask = 1;
 });
 
-const camera1 = new ArcRotateCamera("camera", 3.14 / 2, 3.14 / 2, 15, planetAnalytic.node.position, scene);
-camera1.lowerAlphaLimit = 0 + 0.2;
-camera1.upperAlphaLimit = 3.14 - 0.2;
-camera1.lowerRadiusLimit = 10;
-camera1.upperRadiusLimit = 30;
+const camera1 = new ArcRotateCamera("camera", 3.14 / 2, 3.14 / 2, PLANET_RADIUS * 4, planetAnalytic.node.position, scene);
+camera1.lowerRadiusLimit = PLANET_RADIUS * 2;
+camera1.upperRadiusLimit = PLANET_RADIUS * 6;
+camera1.maxZ = PLANET_RADIUS * 8;
 camera1.layerMask = 1;
 camera1.attachControl(canvas, true);
 
-const planetApprox = new Planet(4, false, scene);
+const planetApprox = new Planet(PLANET_RADIUS, false, scene);
 planetApprox.node.position.x = -10;
 planetApprox.node.getChildMeshes().forEach(mesh => {
     mesh.layerMask = 2;
 });
 
-const camera2 = new ArcRotateCamera("camera2", 3.14 / 2, 3.14 / 2, 15, planetApprox.node.position, scene);
-camera2.lowerAlphaLimit = 0 + 0.2;
-camera2.upperAlphaLimit = 3.14 - 0.2;
-camera2.lowerRadiusLimit = 10;
-camera2.upperRadiusLimit = 30;
+const camera2 = new ArcRotateCamera("camera2", 3.14 / 2, 3.14 / 2, PLANET_RADIUS * 4, planetApprox.node.position, scene);
+camera2.lowerRadiusLimit = PLANET_RADIUS * 2;
+camera2.upperRadiusLimit = PLANET_RADIUS * 6;
+camera2.maxZ = PLANET_RADIUS * 8;
 camera2.layerMask = 2;
 camera2.attachControl(canvas, true);
 

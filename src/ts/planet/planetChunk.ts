@@ -36,7 +36,7 @@ export class PlanetChunk {
     constructor(direction: Direction, planetRadius: number, useAnalyticNormal: boolean, scene: Scene) {
         this.mesh = new Mesh("chunk", scene);
 
-        const nbVerticesPerRow = 16;
+        const nbVerticesPerRow = 8;
 
         const positions = new Float32Array(nbVerticesPerRow * nbVerticesPerRow * 3);
         const normals = new Float32Array(nbVerticesPerRow * nbVerticesPerRow * 3);
@@ -67,7 +67,9 @@ export class PlanetChunk {
 
                 vertexPosition.copyFrom(vertexNormalToPlanet.scale(planetRadius));
 
-                const [height, gradient] = terrainFunction(vertexPosition);
+                const [height, gradient] = terrainFunction(vertexNormalToPlanet);
+
+                gradient.scaleInPlace(1 / planetRadius);
 
                 const projectedGradient = gradient.subtract(vertexNormalToPlanet.scale(Vector3.Dot(gradient, vertexNormalToPlanet)));
 
@@ -110,7 +112,7 @@ export class PlanetChunk {
 
 function terrainFunction(position: Vector3): [height: number, grad: Vector3] {
     const heightMultiplier = 0.5;
-    const frequency = 3;
+    const frequency = 8; // 2
 
     const height = Math.sin(position.y * frequency) * heightMultiplier;
 
