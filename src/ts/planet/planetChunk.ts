@@ -106,7 +106,7 @@ export class PlanetChunk {
         vertexData.applyToMesh(this.mesh);
         if(!useAnalyticNormal) this.mesh.createNormals(false);
 
-        showNormals(this.mesh, scene);
+        showNormals(this.mesh, planetRadius * 0.2, scene);
     }
 }
 

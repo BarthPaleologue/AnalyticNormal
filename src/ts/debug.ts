@@ -4,7 +4,7 @@ import { Color3, VertexBuffer } from "@babylonjs/core";
 import { Scene } from "@babylonjs/core/scene";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 
-export function showNormals(mesh: Mesh, scene: Scene) {
+export function showNormals(mesh: Mesh, length: number, scene: Scene) {
     const normals = mesh.getVerticesData(VertexBuffer.NormalKind);
     if (normals === null) throw new Error("Mesh has no normals");
     const positions = mesh.getVerticesData(VertexBuffer.PositionKind);
@@ -14,7 +14,7 @@ export function showNormals(mesh: Mesh, scene: Scene) {
     const lines = [];
     for (let i = 0; i < normals.length; i += 3) {
         const v1 = Vector3.FromArray(positions, i);
-        const v2 = v1.add(Vector3.FromArray(normals, i));
+        const v2 = v1.add(Vector3.FromArray(normals, i).scaleInPlace(length));
         lines.push([v1, v2]);
     }
     const normalLines = MeshBuilder.CreateLineSystem("normalLines", { lines: lines }, scene);
