@@ -13,7 +13,7 @@ export function createNormalMaterial(scene: Scene) {
         fragment: "normal",
     }, {
         attributes: ["position", "normal"],
-        uniforms: ["worldViewProjection"]
+        uniforms: ["worldViewProjection", "world"]
     });
 
     return material;

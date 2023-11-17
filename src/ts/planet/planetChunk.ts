@@ -2,7 +2,6 @@ import { Scene } from "@babylonjs/core/scene";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { Quaternion, Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData";
-import {showNormals} from "../debug";
 
 export enum Direction {
     FRONT,
@@ -32,13 +31,11 @@ function rotationFromDirection(direction: Direction) {
 
 export class PlanetChunk {
     readonly mesh: Mesh;
-    readonly instancesMatrixBuffer: Float32Array;
-    readonly alignedInstancesMatrixBuffer: Float32Array;
 
     constructor(direction: Direction, planetRadius: number, useAnalyticNormal: boolean, scene: Scene) {
         this.mesh = new Mesh("chunk", scene);
 
-        const nbVerticesPerRow = 32;
+        const nbVerticesPerRow = 64;
 
         const positions = new Float32Array(nbVerticesPerRow * nbVerticesPerRow * 3);
         const normals = new Float32Array(nbVerticesPerRow * nbVerticesPerRow * 3);
@@ -46,13 +43,6 @@ export class PlanetChunk {
 
         const size = planetRadius * 2;
         const stepSize = size / (nbVerticesPerRow - 1);
-
-        const scatterPerSquareMeter = 300;
-
-        const flatArea = size * size;
-        const maxNbInstances = Math.floor(flatArea * scatterPerSquareMeter * 2.0);
-        this.instancesMatrixBuffer = new Float32Array(16 * maxNbInstances);
-        this.alignedInstancesMatrixBuffer = new Float32Array(16 * maxNbInstances);
 
         const rotationQuaternion = rotationFromDirection(direction);
 
