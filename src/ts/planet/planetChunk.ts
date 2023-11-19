@@ -69,7 +69,7 @@ export class PlanetChunk {
 
                 const [height, gradient] = terrainFunction(vertexNormalToPlanet, planetRadius);
 
-                gradient.scaleInPlace(1 / planetRadius);
+                gradient.scaleInPlace(1 / (planetRadius + height));
 
                 const projectedGradient = gradient.subtract(vertexNormalToPlanet.scale(Vector3.Dot(gradient, vertexNormalToPlanet)));
 
